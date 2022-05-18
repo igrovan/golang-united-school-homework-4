@@ -36,19 +36,25 @@ func StringSum(input string) (output string, err error) {
 	var firstValue, secondValue strings.Builder
 
 	i := 0
-	for ; i != 0 && (inputRune[i] == '+' || inputRune[i] == '-'); i++ {
+	for ; i != len(inputRune) && (i == 0 || (inputRune[i] != '+' && inputRune[i] != '-')); i++ {
+		if inputRune[i] == '+' {
+			continue
+		}
 		firstValue.WriteRune(inputRune[i])
 	}
-	if i == len(inputRune)-1 {
+	if i == len(inputRune) {
 		err := fmt.Errorf("%s", errorNotTwoOperands)
 		return "", err
 	}
 
 	j := i
-	for ; j != i && (inputRune[j] == '+' || inputRune[j] == '-'); j++ {
+	for ; j != len(inputRune) && (j == i || (inputRune[j] != '+' && inputRune[j] != '-')); j++ {
+		if inputRune[j] == '+' {
+			continue
+		}
 		secondValue.WriteRune(inputRune[j])
 	}
-	if j != len(inputRune)-1 {
+	if j != len(inputRune) {
 		err := fmt.Errorf("%s", errorNotTwoOperands)
 		return "", err
 	}
