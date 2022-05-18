@@ -29,7 +29,7 @@ func StringSum(input string) (output string, err error) {
 	input = strings.ReplaceAll(input, " ", "")
 	inputRune := []rune(input)
 	if len(input) == 0 {
-		err := fmt.Errorf("%s", errorEmptyInput)
+		err := fmt.Errorf("%w", errorEmptyInput)
 		return "", err
 	}
 
@@ -43,7 +43,7 @@ func StringSum(input string) (output string, err error) {
 		firstValue.WriteRune(inputRune[i])
 	}
 	if i == len(inputRune) {
-		err := fmt.Errorf("%s", errorNotTwoOperands)
+		err := fmt.Errorf("%w", errorNotTwoOperands)
 		return "", err
 	}
 
@@ -55,17 +55,16 @@ func StringSum(input string) (output string, err error) {
 		secondValue.WriteRune(inputRune[j])
 	}
 	if j != len(inputRune) {
-		err := fmt.Errorf("%s", errorNotTwoOperands)
+		err := fmt.Errorf("%w", errorNotTwoOperands)
 		return "", err
 	}
-
 	firstInt, err := strconv.Atoi(firstValue.String())
 	if err != nil {
-		return "", fmt.Errorf("%s", err)
+		return "", fmt.Errorf("%w", err)
 	}
 	secondInt, err := strconv.Atoi(secondValue.String())
 	if err != nil {
-		return "", fmt.Errorf("%s", err)
+		return "", fmt.Errorf("%w", err)
 	}
 
 	output = strconv.Itoa(firstInt + secondInt)
