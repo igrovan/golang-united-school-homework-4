@@ -26,14 +26,29 @@ var (
 // Use the errors defined above as described, again wrapping into fmt.Errorf
 
 func StringSum(input string) (output string, err error) {
+
+	firstValue, secondValue, err := getTwoValues(input)
+	if err != nil {
+		return "", err
+	}
+
+	firstInt, secondInt, err := getTwoIntegers(firstValue, secondValue)
+	if err != nil {
+		return "", err
+	}
+
+	output = strconv.Itoa(firstInt + secondInt)
+
+	return output, nil
+}
+
+func getTwoValues(input string) (firstValue, secondValue strings.Builder, err error) {
 	input = strings.ReplaceAll(input, " ", "")
 	inputRune := []rune(input)
 	if len(input) == 0 {
 		err := fmt.Errorf("%w", errorEmptyInput)
-		return "", err
+		return firstValue, secondValue, err
 	}
-
-	var firstValue, secondValue strings.Builder
 
 	i := 0
 	for ; i != len(inputRune) && (i == 0 || (inputRune[i] != '+' && inputRune[i] != '-')); i++ {
@@ -44,7 +59,7 @@ func StringSum(input string) (output string, err error) {
 	}
 	if i == len(inputRune) {
 		err := fmt.Errorf("%w", errorNotTwoOperands)
-		return "", err
+		return firstValue, secondValue, err
 	}
 
 	j := i
@@ -56,18 +71,22 @@ func StringSum(input string) (output string, err error) {
 	}
 	if j != len(inputRune) {
 		err := fmt.Errorf("%w", errorNotTwoOperands)
-		return "", err
+		return firstValue, secondValue, err
 	}
-	firstInt, err := strconv.Atoi(firstValue.String())
+	return firstValue, secondValue, nil
+}
+
+func getTwoIntegers(firstValue, secondValue strings.Builder) (firstInt, secondInt int, err error) {
+	firstInt, err = strconv.Atoi(firstValue.String())
 	if err != nil {
-		return "", fmt.Errorf("%w", err)
+		err = fmt.Errorf("%w", err)
+		return firstInt, secondInt, err
 	}
-	secondInt, err := strconv.Atoi(secondValue.String())
+	secondInt, err = strconv.Atoi(secondValue.String())
 	if err != nil {
-		return "", fmt.Errorf("%w", err)
+		err = fmt.Errorf("%w", err)
+		return firstInt, secondInt, err
 	}
 
-	output = strconv.Itoa(firstInt + secondInt)
-
-	return output, nil
+	return firstInt, secondInt, nil
 }
